@@ -42,10 +42,10 @@ def crowdhuman2coco(odgt_path,json_path,image_root,prefix):#input: ogdt_path, ou
             #category_id = categories[category]
               
             if category == "person":
-                category_id = 1
+                category_id = 0
                 #fbox = gt_box[j]['fbox']  
                 fbox = gt_box[j]['hbox']  # modified by crpan: area is calculated as hbox width * height
-                if fbox[0] < 0 or fbox[1] < 0 or fbox[0]+fbox[2] > im.size[0] or fbox[1]+fbox[3] > im.size[1]:
+                if fbox[0] < 0 or fbox[1] < 0 or fbox[0]+fbox[2] > im.size[0]-1 or fbox[1]+fbox[3] > im.size[1]-1:
                     continue
                 else:
                     ignore = 0 
@@ -58,7 +58,7 @@ def crowdhuman2coco(odgt_path,json_path,image_root,prefix):#input: ogdt_path, ou
                                   image_id, 'bbox':gt_box[j]['hbox'], 'category_id': category_id,'id': bbox_id,'ignore': ignore,'segmentation': []}  
                     json_dict['annotations'].append(annotation)
                     bbox_id += 1
-        categories["head"] = 1 # Let originally "person" category renamed as "head"
+        categories["head"] = 0 # Let originally "person" category renamed as "head"
         image_id += 1 
     for cate, cid in categories.items():
         cat = {'supercategory': 'none', 'id': cid, 'name': cate}
